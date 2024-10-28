@@ -6,6 +6,152 @@
 * License: https://bootstrapmade.com/license/
 */
 
+/* Forms JS */
+  
+        // Honeypot Spam Protection
+        document.addEventListener("DOMContentLoaded", function () {
+              const forms = document.querySelectorAll("form[action='https://api.web3forms.com/submit']");
+
+              forms.forEach(function (form) {
+                  form.addEventListener("submit", async function (event) {
+                      event.preventDefault();
+
+                      const botCheck = form.querySelector("input[name='botcheck']");
+                      const loading = form.querySelector(".loading");
+                      const errorMessage = form.querySelector(".error-message");
+                      const sentMessage = form.querySelector(".sent-message");
+
+                      // Honeypot Check: Prevent submission if botcheck is filled (indicates spam)
+                      if (botCheck && botCheck.checked) {
+                          errorMessage.textContent = "Spam detected. Please try again.";
+                          errorMessage.style.display = "block";
+                          return;
+                      }
+
+                      loading.style.display = "block";
+                      errorMessage.style.display = "none";
+                      sentMessage.style.display = "none";
+
+                      const formData = new FormData(form);
+
+                      try {
+                          let response = await fetch(form.action, {
+                              method: "POST",
+                              body: formData,
+                              headers: {
+                                  "Accept": "application/json"
+                              }
+                          });
+
+                          loading.style.display = "none";
+
+                          if (response.ok) {
+                              sentMessage.style.display = "block";
+                              form.reset(); // Clear the form upon success
+                          } else {
+                              const result = await response.json();
+                              errorMessage.textContent = result.message || "Something went wrong!";
+                              errorMessage.style.display = "block";
+                          }
+                      } catch (error) {
+                          loading.style.display = "none";
+                          errorMessage.textContent = "There was an error sending your message. Please try again.";
+                          errorMessage.style.display = "block";
+                      }
+                  });
+              });
+          });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+          const forms = document.querySelectorAll("form[action='https://api.web3forms.com/submit']");
+
+          forms.forEach(function (form) {
+            form.addEventListener("submit", async function (event) {
+              event.preventDefault();
+
+              const loading = form.querySelector(".loading");
+              const errorMessage = form.querySelector(".error-message");
+              const sentMessage = form.querySelector(".sent-message");
+
+              loading.style.display = "block";
+              errorMessage.style.display = "none";
+              sentMessage.style.display = "none";
+
+              const formData = new FormData(form);
+
+              try {
+                let response = await fetch(form.action, {
+                  method: "POST",
+                  body: formData,
+                  headers: {
+                    "Accept": "application/json"
+                  }
+                });
+
+                loading.style.display = "none";
+
+                if (response.ok) {
+                  sentMessage.style.display = "block";
+                  form.reset();  // Clear the form upon success
+                } else {
+                  const result = await response.json();
+                  errorMessage.textContent = result.message || "Something went wrong!";
+                  errorMessage.style.display = "block";
+                }
+              } catch (error) {
+                loading.style.display = "none";
+                errorMessage.textContent = "There was an error sending your message. Please try again.";
+                errorMessage.style.display = "block";
+              }
+            });
+          });
+        });
+
+        
+        
+  
+  /* Hidden about section */
+
+    // Get the 'Read More' hidden content section
+    var content = document.getElementById("read-more-content");
+
+    //Hidden-content section remain hidden when refresh
+    /*window.addEventListener('beforeunload', function() {
+      document.querySelectorAll('.hidden-content').forEach(function(element) {
+        element.style.display = 'none';
+      });
+    });*/
+
+    // Wait for the DOM to load completely
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get the 'Read More' link
+      var readMoreLink = document.querySelector('.read-more');
+
+      // Add click event listener to the 'Read More' link
+      readMoreLink.addEventListener('click', function(event) {
+        event.preventDefault();  // Prevent the default link behavior
+
+        //
+
+        // Toggle the hidden content visibility
+        if (content.style.display === "block") {
+          content.style.display = "none";
+          readMoreLink.innerHTML = '<span data-translate="true">Read More</span><i class="bi bi-chevron-down"></i>';
+        } else {
+          content.style.display = "block";
+          readMoreLink.innerHTML = '<span data-translate="true">Show Less</span><i class="bi bi-chevron-up"></i>';
+
+        // Scroll to the "Read More" section
+          content.scrollIntoView({
+            behavior: "smooth",  // Optional for smooth scrolling
+            block: "start"  // Aligns to the top of the section
+          });
+
+        }
+      });
+    });
+
 
 (function() {
   "use strict";
